@@ -15,24 +15,7 @@ public interface AppUserService {
 
     ResponseEntity<?> loginAppUser(String email, String password);
 
-    ResponseEntity<?> updateProfile(String token, AppUser appUser);
+    ResponseEntity<?> fetchAll();
 
-    AppUser fetchInformation(String token);
-
-    AppUser findUser(String email);
-
-    void generateLink(String email) throws MessagingException;
-
-    ResponseEntity<?> validateToken(String token);
-
-    AppUser addAdmin(AppUser appUser);
-
-    AppUser deleteAdmin(String email);
-
-    ResponseEntity<?> fetchOtherAdmins(String email);
-
-//    ResponseEntity<?> deleteAccount(AppUser appUser);
-
-    ResponseEntity<?> resetPassword(String email, String password);
 }
 

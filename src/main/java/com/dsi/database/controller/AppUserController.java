@@ -26,6 +26,11 @@ public class AppUserController {
         return appUserService.loginAppUser(appUser.getEmail(), appUser.getPassword());
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<?> getAll(){
+        return appUserService.fetchAll();
+    }
+
 
 
 }

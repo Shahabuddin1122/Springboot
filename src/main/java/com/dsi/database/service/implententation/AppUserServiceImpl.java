@@ -66,79 +66,10 @@ public class AppUserServiceImpl implements AppUserService {
     }
 
     @Override
-    public ResponseEntity<?> updateProfile(String token, AppUser appUser) {
-        return null;
+    public ResponseEntity<?> fetchAll() {
+        List<AppUser> appUser = appUserRepository.findAll();
+        return new ResponseEntity<>(appUser,HttpStatus.OK);
     }
-
-
-    @Override
-    public AppUser fetchInformation(String token) {
-        return appUserRepository.findByEmail(jwtTokenService.getUsernameFromToken(token.substring(7)));
-    }
-
-
-    @Override
-
-    public AppUser findUser(String email) {
-        return appUserRepository.findByEmail(email);
-    }
-
-    @Override
-    public void generateLink(String email) throws MessagingException {
-
-    }
-
-
-    @Override
-    public ResponseEntity<?> validateToken(String token) {
-        String email = jwtTokenService.getUsernameFromToken(token);
-        long expirationTime = jwtTokenService.getExpirationDateFromToken(token).getTime();
-        long currentTime = System.currentTimeMillis();
-
-        AppUser appUser = appUserRepository.findByEmail(email);
-        if (appUser != null) {
-            if (currentTime <= expirationTime) {
-                return new ResponseEntity<>(appUser, HttpStatus.OK);
-            }
-        }
-        return new ResponseEntity<>(HttpStatus.REQUEST_TIMEOUT);
-    }
-
-    @Override
-    public AppUser addAdmin(AppUser appUser) {
-        appUser.setPassword(passwordEncoder.encode(appUser.getPassword()));
-        appUser.setRole("ROLE_ADMIN");
-        return appUserRepository.save(appUser);
-    }
-
-    @Override
-    public AppUser deleteAdmin(String email) {
-
-        AppUser admin = appUserRepository.findByEmail(email);
-        appUserRepository.delete(admin);
-
-        return null;
-    }
-
-    @Override
-    public ResponseEntity<?> fetchOtherAdmins(String email) {
-        AppUser loggedAdmin = appUserRepository.findByEmail(email);
-        List<AppUser> userList = appUserRepository.findAllByRole("ROLE_ADMIN");
-        userList.remove(loggedAdmin);
-        return new ResponseEntity<>(userList, HttpStatus.OK);
-    }
-
-    @Override
-    public ResponseEntity<?> resetPassword(String email, String password) {
-        AppUser user = appUserRepository.findByEmail(email);
-        if (user != null) {
-            user.setPassword(passwordEncoder.encode(password));
-            appUserRepository.save(user);
-            return new ResponseEntity<>(HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-    }
-
 
 
 }

@@ -15,6 +15,10 @@ import java.util.List;
 public class ProductServiceImpl implements ProductService {
     @Autowired
     public ProductRepository productRepository;
+
+    @Autowired
+    public RedisServiceImpl redisService;
+
     @Override
     public ResponseEntity<?> saveProducts(Products products) {
         Products products1 = productRepository.save(products);
@@ -23,7 +27,15 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ResponseEntity<?> getAllProducts() {
-        return new ResponseEntity<>(productRepository.findAll(),HttpStatus.OK);
+
+        String cacheData = redisService.getValue("products");
+
+        if(cacheData != null){
+            return new ResponseEntity<>(cacheData,HttpStatus.OK);
+        }
+        Object products = productRepository.findAll();
+        redisService.setValue("products",products.toString());
+        return new ResponseEntity<>(products,HttpStatus.OK);
     }
 
     @Override

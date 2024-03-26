@@ -13,9 +13,16 @@ public class RedisServiceImpl implements RedisService {
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
 
+//    private final StringRedisTemplate redisTemplate;
+//
+//    public RedisServiceImpl(StringRedisTemplate redisTemplate) {
+//        this.redisTemplate = redisTemplate;
+//    }
+
 
     public void setValue(String key, String value) {
         redisTemplate.opsForValue().set(key, value);
+//        redisTemplate.opsForHash().put(key,"ABC",value);
         redisTemplate.expire(key,50, TimeUnit.SECONDS);
     }
 

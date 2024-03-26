@@ -29,10 +29,6 @@ public class AppUser extends BaseEntity<Long> implements UserDetails, Serializab
     private String role;
 //    private final static String ROLE="ROLE_USER";
 
-    @JsonIgnore
-    public String getPassword() {
-        return password;
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
